@@ -1322,3 +1322,18 @@ static void tdx_guest_class_init(ObjectClass *oc, void *data)
     x86_klass->mask_cpuid_features = tdx_mask_cpuid_features;
     x86_klass->adjust_cpuid = tdx_adjust_cpuid;
 }
+
+int tdh_mem_range_block(uint64_t gpa_start, uint64_t gpa_end)
+{
+    SEAMCALL_ARGS args;
+    args.gpa_start = gpa_start;
+    args.gpa_end = gpa_end;
+    #define TDH_MEM_RANGE_BLOCK_LEAF_NUM 7
+    struct tdx_module_output out;
+    return __seamcall(TDH_MEM_RANGE_BLOCK_LEAF_NUM, 
+                    gpa_start, // u64 rcx,
+                    gpa_end, // u64 rdx,
+                    0, // u64 r8,
+                    0, // u64 r9,
+                    &out);
+}

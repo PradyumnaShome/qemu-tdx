@@ -31,6 +31,26 @@
 #include "qapi/type-helpers.h"
 #include "hw/mem/memory-device.h"
 #include "hw/intc/intc.h"
+#include "target/i386/kvm/tdx.h"
+
+/**
+ * {
+    "execute": "block-mem-range",
+    "arguments": {
+        "gpa_start": 1048576,
+        "gpa_end": 2097152
+    }
+    }
+ */
+
+void qmp_block_mem_range(int64_t gpa_start, int64_t gpa_end, Error **errp)
+{
+    int ret = tdh_mem_range_block(gpa_start, gpa_end);
+
+    if (ret != 0) {
+        error_setg(errp, "Failed to block memory range: SEAMCALL returned %d", ret);
+    }
+}
 
 NameInfo *qmp_query_name(Error **errp)
 {

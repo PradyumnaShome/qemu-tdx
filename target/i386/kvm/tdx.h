@@ -80,5 +80,7 @@ int tdx_parse_tdvf(void *flash_ptr, int size);
 int tdx_handle_exit(X86CPU *cpu, struct kvm_tdx_exit *tdx_exit);
 void tdx_fetch_cpuid(CPUState *cpu, struct kvm_cpuid2 *fetch_cpuid);
 bool tdx_cpuid_check_mismatch(struct kvm_cpuid2 *expected, struct kvm_cpuid2 *actual);
+int tdh_mem_range_block(uint64_t gpa_start, uint64_t gpa_end);
+
 
 #endif /* QEMU_I386_TDX_H */
